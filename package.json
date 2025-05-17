@@ -13,11 +13,6 @@
     "clean": "rimraf dist out && rimraf src/database/database.db"
   },
   "keywords": [],
-  "author": {
-    "name": "Jacky",
-    "email": "thanhbesthresh@gmail.com"
-  },
-  "license": "MIT",
   "dependencies": {
     "better-sqlite3": "^11.9.1",
     "ejs-electron": "^3.0.0",
