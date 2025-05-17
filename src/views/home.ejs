@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deadline Manager</title>
+  <link rel="stylesheet" href="./public/css/main.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Deadline Manager</h1>
+      <p>Quản lý công việc và thời hạn hiệu quả</p>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <!-- Form thêm deadline mới -->
+      <section class="add-deadline card">
+        <h2>Thêm Deadline Mới</h2>
+        <form id="deadline-form">
+          <div class="form-group">
+            <label for="task-name">Tên công việc</label>
+            <input type="text" id="task-name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="due-date">Hạn chót</label>
+            <input type="datetime-local" id="due-date" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="priority">Mức độ ưu tiên</label>
+            <select id="priority" class="form-control">
+              <option value="low">Thấp</option>
+              <option value="medium" selected>Trung bình</option>
+              <option value="high">Cao</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="reminder">Nhắc nhở trước</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="number" id="reminder-time" class="form-control" min="1" value="1" style="width: 70%;">
+              <select id="reminder-unit" class="form-control" style="width: 30%;">
+                <option value="minutes">Phút</option>
+                <option value="hours">Giờ</option>
+                <option value="days" selected>Ngày</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Ghi chú</label>
+            <textarea id="notes" class="form-control"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-block">Thêm Deadline</button>
+        </form>
+      </section>
+
+      <!-- Danh sách deadline -->
+      <section class="deadline-list card">
+        <h2>Danh sách Deadline</h2>
+
+        <div class="filter-controls">
+          <div>
+            <label for="sort-by">Sắp xếp theo:</label>
+            <select id="sort-by" class="form-control">
+              <option value="newest">Thời gian</option>
+              <option value="date">Thời gian kết thúc</option>
+              <option value="priority">Ưu tiên</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="show-completed">
+              <input type="checkbox" id="show-completed"> Hiển thị đã hoàn thành
+            </label>
+          </div>
+        </div>
+
+        <div id="deadline-container" class="scrollable">
+          <div class="no-deadlines">
+            <p>Chưa có deadline nào được thêm</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Thống kê -->
+    <section class="stats card">
+      <h2>Thống kê</h2>
+
+      <div class="stats-content">
+        <div class="stat-item">
+          <div class="stat-value" id="total-deadlines">0</div>
+          <div class="stat-label">Tổng số deadline</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value" id="completed-this-week">0</div>
+          <div class="stat-label">Hoàn thành trong tuần</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value" id="on-time-percentage">0%</div>
+          <div class="stat-label">Tỷ lệ hoàn thành đúng hạn</div>
+        </div>
+
+        <div class="stat-item">
+          <div class="stat-value" id="upcoming-deadlines">0</div>
+          <div class="stat-label">Deadline sắp tới</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Thông báo -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Script xử lý -->
+  <script src="./public/js/handler.js" defer></script>
+</body>
+</html>
