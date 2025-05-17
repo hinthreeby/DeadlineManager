@@ -97,26 +97,62 @@
 					year: 'numeric',
 				});
 
-				deadlineEl.innerHTML = `
-					<div class="deadline-info">
-						<div class="deadline-title">${deadline.Name}</div>
-						<div class="deadline-meta">
-							<div>Tạo ngày: ${formattedCreatedDate}</div>
-							<div>Hạn chót: ${formattedDate} ${remainingTime ? `(${remainingTime})` : ''}</div>
-							<div>Ưu tiên: ${priorityText}</div>
-							${deadline.Description ? `<div>Ghi chú: ${deadline.Description}</div>` : ''}
-						</div>
-					</div>
-					<div class="deadline-actions">
-						${!deadline.Finished ? `<button class="action-btn complete" data-id="${deadline.ID}">✓</button>` : ''}
-						<button class="action-btn delete" data-id="${deadline.ID}">✗</button>
-					</div>
-				`;
+				deadlineEl.replaceChildren();
 
+				const info = document.createElement('div');
+				info.classList.add('deadline-info');
+
+				const title = document.createElement('div');
+				title.classList.add('deadline-title');
+				title.textContent = deadline.Name;
+				info.appendChild(title);
+
+				const meta = document.createElement('div');
+				meta.classList.add('deadline-meta');
+
+				const created = document.createElement('div');
+				created.textContent = `Tạo ngày: ${formattedCreatedDate}`;
+				meta.appendChild(created);
+
+				const due = document.createElement('div');
+				let dueText = `Hạn chót: ${formattedDate}`;
+				if (remainingTime) dueText += ` (${remainingTime})`;
+				due.textContent = dueText;
+				meta.appendChild(due);
+
+				const prio = document.createElement('div');
+				prio.textContent = `Ưu tiên: ${priorityText}`;
+				meta.appendChild(prio);
+
+				if (deadline.Description) {
+					const note = document.createElement('div');
+					note.textContent = `Ghi chú: ${deadline.Description}`;
+					meta.appendChild(note);
+				}
+
+				info.appendChild(meta);
+				deadlineEl.appendChild(info);
+
+				const actions = document.createElement('div');
+				actions.classList.add('deadline-actions');
+
+				if (!deadline.Finished) {
+					const completeBtn = document.createElement('button');
+					completeBtn.classList.add('action-btn', 'complete');
+					completeBtn.dataset.id = deadline.ID;
+					completeBtn.textContent = '✓';
+					actions.appendChild(completeBtn);
+				}
+
+				const deleteBtn = document.createElement('button');
+				deleteBtn.classList.add('action-btn', 'delete');
+				deleteBtn.dataset.id = deadline.ID;
+				deleteBtn.textContent = '✗';
+				actions.appendChild(deleteBtn);
+				deadlineEl.appendChild(actions);
 				deadlineContainer.appendChild(deadlineEl);
 
 				const completeBtn = deadlineEl.querySelector('.action-btn.complete');
-				const deleteBtn = deadlineEl.querySelector('.action-btn.delete');
 
 				if (completeBtn) {
 					completeBtn.addEventListener('click', () => completeDeadline(deadline.ID));

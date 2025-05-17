@@ -1,3 +1,8 @@
+/**
+ * Mô-đun quản lý kết nối và khởi tạo cơ sở dữ liệu SQLite.
+ * @module utils/database
+ */
+
 const sqlite3 = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
@@ -5,6 +10,15 @@ const { app } = require('electron');
 const registerShutdown = global.utils['shutdown'];
 
 module.exports = {
+	/**
+	 * Khởi tạo kết nối đến cơ sở dữ liệu SQLite.
+	 * - Tạo file database nếu chưa tồn tại.
+	 * - Thiết lập bảng Deadline nếu chưa có.
+	 * - Đăng ký đóng kết nối khi đóng ứng dụng.
+	 * @async
+	 * @returns {Promise<sqlite3.Database>} Đối tượng kết nối cơ sở dữ liệu.
+	 * @throws {Error} Nếu khởi tạo hoặc kết nối thất bại.
+	 */
 	init: async () => {
 		if (global.db) {
 			console.info('[Database]: Found current db Instance');
@@ -16,13 +30,16 @@ module.exports = {
 			const userDataPath = app.getPath('userData');
 			const dbPath = path.join(userDataPath, 'database.db');
 
+			// Tạo file database nếu chưa tồn tại
 			if (!fs.existsSync(dbPath)) {
 				console.info('[Database]: Generating new database file ...');
 				await fs.promises.writeFile(dbPath, '', { encoding: 'utf8' });
 			}
 
+			// Mở kết nối SQLite với verbose log
 			global.db = new sqlite3(dbPath, { verbose: console.log });
 
+			// Thiết lập bảng Deadline
 			global.db
 				.prepare(
 					`
@@ -44,6 +61,7 @@ module.exports = {
 
 			console.info('[Database]: Connected.');
 
+			// Đăng ký đóng kết nối khi shutdown
 			if (registerShutdown) {
 				registerShutdown(() => {
 					global.db.close();
@@ -57,6 +75,10 @@ module.exports = {
 		}
 	},
 
+	/**
+	 * Lấy đối tượng kết nối đang hoạt động.
+	 * @returns {sqlite3.Database|undefined} Đối tượng cơ sở dữ liệu nếu đã kết nối, ngược lại undefined.
+	 */
 	getConnection: () => {
 		if (global.db) {
 			console.info('[Database]: Found current db Instance');

@@ -16,7 +16,7 @@ Document
 1. **Clone repository:**
 
 ```bash
-git clone https://github.com/AloneBiNgu/DeadlineManager.git
+git clone https://github.com/hinthreeby/DeadlineManager.git
 cd DeadlineManager
 ```
 
